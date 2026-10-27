@@ -2,4 +2,5 @@ numpy
 pandas
 matplotlib
 seaborn
-
+ydata-profiling
+setuptools<81
