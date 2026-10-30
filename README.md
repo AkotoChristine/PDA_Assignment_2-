@@ -1,27 +1,129 @@
 # PDA_Assignment_2
 
-Main questions to answer
-- How are GDP per capita, unemployment, and life expectancy related across countries from 2000 to 2024?
-- Do countries with higher GDP per capita tend to have lower unemployment rates?
-- Do countries with higher GDP per capita tend to have longer life expectancy?
-- Within each country, how do changes in GDP per capita relate to changes in unemployment?
-- Within each country, how do changes in GDP per capita relate to changes in life expectancy?
-- How is unemployment related to life expectancy?
-- Which countries have high GDP per capita but also high unemployment?
+---
 
-8. Which countries have low GDP per capita but relatively high life expectancy?
-9. Did these relationships differ between 2000-2019 and 2020-2024?
-10. How do the three indicators differ across continents?
-11. Is the GDP-life expectancy relationship stronger in some continents than others?
-12. Which continent saw the largest life expectancy gain, and how did GDP per capita change over the same period?
+## Findings: how income, jobs and health fit together
+
+The data are World Bank indicators for about 218 countries, 2000-2024: GDP per capita (current US$), life expectancy at birth, and the unemployment rate. Regional and income-group aggregates (World, Euro area and so on) were removed so countries are not double counted. All code, figures and caveats are in [notebooks/gdp_per_capita.ipynb](notebooks/gdp_per_capita.ipynb); each question below names its section and figure.
+
+**How to read the numbers.** *ρ* (rho) is a rank correlation: +1 means two things always rise together, 0 means no link, -1 means one rises as the other falls. Values near 0.1 are weak, around 0.5 moderate and above 0.8 strong. *Intervals* in brackets are 95% ranges from resampling countries; when two intervals do not overlap, the difference is unlikely to be chance. GDP is in current US$ and life expectancy is at birth. Country-level figures are medians, so every country counts equally whatever its population.
+
+**The one-paragraph story.** Income and health travel together: richer countries live far longer, and this held in every year and even through the pandemic. Jobs are the odd one out: unemployment is not connected to income or health across countries, and only loosely follows the economy inside a country. The exceptions are informative: a few rich countries with high unemployment (Spain above all), and poor countries that live much longer than their income predicts (Tajikistan, the Kyrgyz Republic, Nepal). Continents differ enormously in income and health, Africa made the largest health gains of the period, and none of that rested on the fastest economic growth.
+
+### 1. How are GDP per capita, unemployment, and life expectancy related across countries from 2000 to 2024?
+
+**Short answer: GDP and life expectancy are strongly linked; unemployment is unrelated to either.** (Notebook section 2, Figures 1-2.)
+
+*The story.* Plotting every country-year, GDP per capita and life expectancy rise together with **ρ ≈ 0.87**. Each tenfold increase in GDP per capita goes with about **10.5 more years of life**, with diminishing returns at high incomes. The link was just as strong in every single year (ρ between **0.85 and 0.88**). Unemployment, by contrast, has essentially no relationship with GDP or life expectancy (|ρ| below **0.1**), and year by year it drifts between about **-0.24 and +0.15** with no consistent direction.
+
+| Pair | ρ (all country-years) | Reading |
+|---|---|---|
+| GDP per capita vs life expectancy | about 0.87 | Strong, stable every year |
+| GDP per capita vs unemployment | below 0.1 in size | No link |
+| Life expectancy vs unemployment | below 0.1 in size | No link |
+
+*Caveat.* Correlation is not causation; unemployment is reported for only about 58% of country-years.
+
+### 2. Do countries with higher GDP per capita tend to have lower unemployment rates?
+
+**Short answer: no across countries, but yes inside a country over time.** (Section 3, Figures 3-4.)
+
+*The story.* Across **170 countries**, average GDP per capita says nothing about average unemployment (**ρ = 0.05, p ≈ 0.5**). The pattern is hump-shaped, not a slope: median unemployment is lowest in the poorest quartile (**4.6%**) and richest quartile (**5.6%**) and highest in the middle (about **8.5%**). Poor countries report low open unemployment largely because most people work informally and cannot afford to be unemployed.
+
+Inside a single country the pattern is different: in **76% of 146 countries**, unemployment was lower in the years when GDP per capita was higher. Rising GDP per capita is a reasonable rough signal that unemployment is easing in one country, but not a way to rank countries.
+
+*Caveat.* Unemployment uses national definitions, and GDP in current US$ mixes real growth with inflation and exchange rates.
+
+### 3. Do countries with higher GDP per capita tend to have longer life expectancy?
+
+**Short answer: yes, clearly.** (Section 4, Figure 5.)
+
+*The story.* Using each country's 2000-2024 average, each tenfold increase in GDP per capita goes with about **10.9 more years of life expectancy**. Sorting countries into income quartiles shows the staircase: median life expectancy is **61.1** years in the poorest quartile, **70.4** in lower-middle, **74.2** in upper-middle and **80.5** in the richest. The biggest single step, about **9 years**, is from the poorest group to the next, so gains are largest when moving out of the lowest incomes.
+
+| Income quartile | Median life expectancy (years) |
+|---|---|
+| Low | 61.1 |
+| Lower-middle | 70.4 |
+| Upper-middle | 74.2 |
+| High | 80.5 |
+
+*Caveat.* Not causation (health also raises productivity), and GDP is not adjusted for local prices.
+
+### 4. Within each country, how do changes in GDP per capita relate to changes in unemployment?
+
+**Short answer: in the direction you would expect, but weakly.** (Section 5, Figure 6.)
+
+*The story.* Comparing each country's yearly GDP growth with the change in its unemployment rate, the typical country has a correlation of **-0.29**: faster growth goes with falling unemployment. Nearly half of countries (**48%**) are below -0.3 and only **2%** are above +0.3, so almost no country shows unemployment rising systematically when GDP grows. But the effect is small: **1 percentage point** more growth goes with only about **0.03 percentage points** lower unemployment. Growth years are better and recession years worse, but the size of the swing is driven by other things.
+
+*Caveat.* Unemployment often responds to GDP with a lag of a year or more, which same-year changes miss.
+
+### 5. Within each country, how do changes in GDP per capita relate to changes in life expectancy?
+
+**Short answer: over the long run they move together; from year to year the link is faint.** (Section 6, Figure 7.)
+
+*The story.* Over time, **99% of 214 countries** show GDP and life expectancy rising together (median ρ = **0.79**). But that is largely both series trending upward. Comparing yearly changes, the typical country's correlation is only **0.12** (pooled **0.10** across 5,048 country-years), though the direction is still mostly positive: **65% of 213 countries** are positive, **25%** above +0.3 and only **5%** below -0.3. In size, **1 point** more growth goes with only about **0.007 more years** of life expectancy. Dropping 2020-2021, when COVID-19 hit both, changes the pooled figure only from 0.10 to **0.09**.
+
+| View | Median ρ within countries | Share of countries positive |
+|---|---|---|
+| Levels over time | 0.79 | 99% (of 214) |
+| Yearly changes | 0.12 | 65% (of 213) |
+
+*Caveat.* Health effects of income can arrive years later, which same-year changes miss.
+
+### 6. How is unemployment related to life expectancy?
+
+**Short answer: essentially not related, apart from a hint among the richest countries.** (Section 7, Figure 8.)
+
+*The story.* Across **170 countries**, average unemployment and life expectancy are unrelated (**ρ = 0.02, p = 0.84**). Year-to-year changes inside countries agree: median ρ **-0.01**, **49%** of 120 countries positive, pooled **-0.02** (n = 2,639).
+
+Income hides a small pattern. Within income quartiles the correlation runs from **+0.14** (low) and **+0.01** (lower-middle) to **-0.16** (upper-middle) and **-0.37** (high): among the richest countries, higher unemployment goes with somewhat lower life expectancy. With only about 40 countries per group, that is suggestive, not firm. Tracking countries over time, levels lean negative (median ρ **-0.28**, only **32%** of 146 countries positive), but yearly changes show nothing, which points to a shared long-run drift and not a year-by-year effect.
+
+| Income quartile | ρ between countries |
+|---|---|
+| Low | +0.14 |
+| Lower-middle | +0.01 |
+| Upper-middle | -0.16 |
+| High | -0.37 |
+
+*Caveat.* Unemployment in poorer countries understates joblessness because of informal work.
+
+### 7. Which countries have high GDP per capita but also high unemployment?
+
+**Short answer: only four of the 43 rich countries, led by Spain.** (Section 8, Figure 9.)
+
+*The story.* "High" was defined by quartile: GDP per capita of at least **$26,452** (top quartile) and average unemployment above **9.9%** (top quartile), on 2000-2024 averages. Of **43 high-GDP countries**, just **4** also have high unemployment. Spain stands out at **15.4%**, well ahead of the next. It is the only large economy on the list and has high life expectancy (**81.9** years). The others are small territories or island economies. Just under the line sit Guam and Greenland (9.6%), Italy (9.2%) and France (8.8%), so the list is sensitive to the cut-off.
+
+| Country | GDP per capita (US$) | Unemployment (%) | Life expectancy (years) |
+|---|---|---|---|
+| Spain | 27,905 | 15.4 | 81.9 |
+| New Caledonia | 30,465 | 12.6 | 76.3 |
+| Puerto Rico (US) | 27,149 | 11.3 | 78.9 |
+| Bahamas, The | 29,740 | 10.9 | 73.4 |
+
+*Caveat.* Averages over 2000-2024 hide large swings, such as Spain's peak after 2008, and the reasons given for the island economies are plausible explanations, not tested here.
+
+### 8. Which countries have low GDP per capita but relatively high life expectancy?
+
+**Short answer: none beat the world median, but several live much longer than their income predicts.** (Section 9, Figure 10.)
+
+*The story.* Of the **54 countries** in the poorest quartile (average GDP per capita of **$1,743 or less**), **none** exceeds the all-country median life expectancy of **72.4 years**, so income still sets a ceiling. "Relatively high" therefore means above what income predicts. The biggest overperformers are mostly in Central and South Asia: Tajikistan reaches **68.5 years on about $716 per person**, **7.8 years above** the income trend, followed by the Kyrgyz Republic (+7.4), Nicaragua (+6.7), Syria (+6.4), Nepal (+6.1) and Bangladesh (+5.5). These are good places to look for low-cost health gains that income does not explain.
+
+| Country | GDP per capita (US$) | Life expectancy (years) | Above trend (years) |
+|---|---|---|---|
+| Tajikistan | 716 | 68.5 | +7.8 |
+| Kyrgyz Republic | 1,044 | 69.9 | +7.4 |
+| Nicaragua | 1,720 | 71.6 | +6.7 |
+| Syrian Arab Republic | 1,422 | 70.5 | +6.4 |
+| Nepal | 752 | 67.1 | +6.1 |
+| Bangladesh | 1,230 | 68.8 | +5.5 |
+
+*Caveat.* Syria's long-run average is pulled down by the war years, and why these countries do well is not tested here.
 
 ---
 
 ## Findings for questions 9-12: did anything change, and where?
 
-The first eight questions established the basic picture: richer countries live longer, and unemployment is a poor guide to either income or health. Questions 9-12 ask whether that picture is stable. First across time (before and after 2020), then across the world (by continent). All code, figures and caveats are in [notebooks/gdp_per_capita.ipynb](notebooks/gdp_per_capita.ipynb), sections 10-13 (Figures 11-14).
-
-**How to read the numbers.** *ρ* (rho) is a rank correlation: +1 means two things always rise together, 0 means no link, -1 means one rises as the other falls. Values near 0.1 are weak, around 0.5 moderate and above 0.8 strong. *Intervals* in brackets are 95% ranges from resampling countries; when two intervals do not overlap, the difference is unlikely to be chance. GDP is in current US$ and life expectancy is at birth. Country-level figures are medians, so every country counts equally whatever its population.
+Questions 9-12 ask whether that picture is stable: first across time (before and after 2020), then across the world (by continent). Notebook sections 10-13, Figures 11-14.
 
 ### 9. Did these relationships differ between 2000-2019 and 2020-2024?
 
